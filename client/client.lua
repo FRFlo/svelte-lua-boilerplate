@@ -4,7 +4,7 @@ RegisterCommand('svelte:show', function()
         data = true
     })
     SetNuiFocus(true, true)
-end)
+end, false)
 
 RegisterNUICallback('getClientData', function(_, cb)
     local playerCoords = GetEntityCoords(PlayerPedId())

@@ -3,12 +3,10 @@
   import { fetchNui } from '../utils/fetchNui';
   import { onMount } from 'svelte';
   import { visibility } from '../store/stores';
+  import { get } from 'svelte/store';
+  import type { Snippet } from 'svelte';
 
-  let isVisible: boolean;
-
-  visibility.subscribe((visible) => {
-    isVisible = visible;
-  });
+  let { children }: { children: Snippet } = $props();
 
   useNuiEvent<boolean>('setVisible', (visible) => {
     visibility.set(visible);
@@ -16,7 +14,7 @@
 
   onMount(() => {
     const keyHandler = (e: KeyboardEvent) => {
-      if (isVisible && ['Escape'].includes(e.code)) {
+      if (get(visibility) && ['Escape'].includes(e.code)) {
         fetchNui('hideUI');
         visibility.set(false);
       }
@@ -29,7 +27,7 @@
 </script>
 
 <main>
-  {#if isVisible}
-    <slot />
+  {#if $visibility}
+    {@render children()}
   {/if}
 </main>

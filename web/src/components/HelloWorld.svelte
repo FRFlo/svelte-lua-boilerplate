@@ -8,10 +8,10 @@
     z: number;
   }
 
-  let clientData: ReturnData;
+  let clientData = $state<ReturnData | undefined>(undefined);
 
   const handleClientData = () => {
-    fetchNui('getClientData')
+    fetchNui<ReturnData>('getClientData')
       .then((returnData) => {
         clientData = returnData;
       })
@@ -30,8 +30,8 @@
   <h2>Svelte NUI Popup!</h2>
   <div style="margin: 0.3vh 0;">Player coords: {JSON.stringify(clientData) || ''}</div>
   <div class="btn-wrapper">
-    <button on:click={handleClientData}> Get client coords </button>
-    <button on:click={closeDialog}>Close popup</button>
+    <button onclick={handleClientData}> Get client coords </button>
+    <button onclick={closeDialog}>Close popup</button>
   </div>
   <span>Or press the escape key!</span>
 </div>

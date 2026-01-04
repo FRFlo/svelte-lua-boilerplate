@@ -13,8 +13,7 @@ by restarting the resource, instead of having to make a production build.
 This version of the boilerplate is meant for the CfxLua runtime.
 
 ## Requirements
-* [Node > v10.6](https://nodejs.org/en/)
-* [pnpm](https://pnpm.io/installation) (Highly recommended over yarn or npm)
+* [Bun](https://bun.sh/) (Recommended)
 
 *A basic understanding of the modern web development workflow. If you don't 
 know this yet, Svelte might not be for you just yet.*
@@ -27,7 +26,7 @@ it within your `resources` folder
 ### Installation
 
 Install dependencies by navigating to the `web` folder within
-a terminal of your choice and type `pnpm i`.
+a terminal of your choice and type `bun install`.
 
 ## Features
 
@@ -46,7 +45,11 @@ from the Svelte store.
 
 Before being able to use the writable you must first import it from `store/stores.ts`
 ```svelte
-<button on:click={() => visibility.set(false)}>
+<script lang="ts">
+  import { visibility } from '../store/stores';
+</script>
+
+<button onclick={() => visibility.set(false)}>
   Exit
 </button>
 ```
@@ -64,7 +67,7 @@ come across a personal usecase for a cascading event system*
 **Usage**
 ```svelte
 <script lang="ts">
-  let characterName: string;
+  let characterName = $state<string>('');
   
   useNuiEvent<string>('myAction', (data) => {
     // the first argument to the handler function
@@ -92,18 +95,18 @@ in the gamescripts.
 **Usage**
 ```svelte
 <script lang="ts">
-  let clientCoords: {x: number; y: number; z: number};
+  let clientCoords = $state<{x: number; y: number; z: number} | undefined>(undefined);
 
   fetchNui<{x: number; y: number; z: number}>('getClientData').then(retData => {
     console.log('Got return data from client scripts:', retData);
     clientCoords = retData
   }).catch(e => {
     console.log('Setting mock data due to error', e)
-    clientCoords = {x: 500, y: 300: z: 200}
+    clientCoords = {x: 500, y: 300, z: 200}
   })
 </script>
 
-<div>{clientCoords}</div>
+<div>{JSON.stringify(clientCoords)}</div>
 ```
 
 **debugData**
@@ -146,7 +149,7 @@ For development in browser you can just run `dev` instead.
 
 **Usage**
 ```sh
-pnpm dev
+bun run dev
 ```
 
 **Production Builds**
@@ -157,7 +160,7 @@ must create a production build that is optimized and minimized.
 You can do this by running the following:
 
 ```sh
-pnpm build
+bun run build
 ```
 
 ## Additional Notes
